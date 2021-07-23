@@ -122,19 +122,24 @@
                 "https://jsonplaceholder.typicode.com/todos/5"
             ];
 
-            const getDeletedItem = async (url) => {
-                var item = await axios.get(url);
-                progress ++;
-                return item;
+            function getData(url) {
+                return axios.get(url)
+                        .then(res => res.data.id);
             }
 
-            getDeletedItem(items[0]).then(res => {
-                width = ((progress)*100)/concurrency;
-                document.getElementById('item_deleted').innerHTML = res.data.id;
-                document.getElementById('concurrency').value = progress;
-                document.getElementsByClassName('progress-bar')[0].style = 'width: ' + width + '%';
-                document.getElementsByClassName('progress-bar')[0].innerHTML = width + '%';
-            })
+            const getItem = async () => {
+                for (let i=0; i<concurrency; i++) {
+                    const item = await getData(items[i]);
+                    arr_item_deleted.push(item);
+                    width = ((i+1)*100)/concurrency;
+                    document.getElementById('item_deleted').innerHTML = arr_item_deleted;
+                    document.getElementById('concurrency').value = i+1;
+                    document.getElementsByClassName('progress-bar')[0].style = 'width: ' + width + '%';
+                    document.getElementsByClassName('progress-bar')[0].innerHTML = width + '%';
+                }
+            };
+
+            getItem();
         }
     }
     
