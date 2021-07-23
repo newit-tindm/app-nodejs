@@ -127,6 +127,10 @@
                         .then(res => res.data.id);
             }
 
+            function done() {
+                return alert('done!');
+            }
+
             const getItem = async () => {
                 for (let i=0; i<concurrency; i++) {
                     const item = await getData(items[i]);
@@ -137,6 +141,8 @@
                     document.getElementsByClassName('progress-bar')[0].style = 'width: ' + width + '%';
                     document.getElementsByClassName('progress-bar')[0].innerHTML = width + '%';
                 }
+
+                await done();
             };
 
             getItem();
